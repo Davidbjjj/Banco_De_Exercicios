@@ -1,0 +1,299 @@
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Questões</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <style>
+            .instituicao {
+                font-weight: bold;
+            }
+            .escopo {
+                font-style: italic;
+            }
+            .alternativa {
+                margin-left: 20px;
+            }
+        </style>
+        <script>
+            var respostasCorretas = {
+    "1": "a",
+"2": "c",
+"8": "e",
+"5": "c",
+"3": "b",
+"4": "c",
+"𝟓": "c",
+"𝟐": "c",
+"48": "a",
+"9": "d",
+"150": "b",
+"125": "c",
+"100": "a",
+"25": "b",
+"30": "c",
+"33": "d",
+"7": "d",
+"6": "c",
+"𝟏": "a",
+"10": "c",
+"12": "d",
+"11": "c",
+"22": "c",
+"23": "d",
+"24": "d",
+"26": "b",
+"27": "c",
+"28": "c",
+"29": "c",
+"31": "a",
+"32": "d",
+"34": "b",
+"35": "b",
+"36": "b",
+"37": "b",
+"38": "a",
+"39": "d",
+"40": "a",
+"41": "c",
+"42": "c",
+"43": "b",
+"44": "b",
+"45": "d",
+"46": "c",
+"47": "b",
+"49": "a",
+"50": "a",
+"51": "c",
+"52": "b",
+"53": "c",
+"55": "d",
+"57": "d",
+"58": "b",
+"59": "e",
+"60": "c",
+"61": "a",
+"16": "c",
+"75": "c",
+"0": "d",
+"14": "c",
+
+            };
+
+            function atualizarGabarito(numero, respostaSelecionada) {
+                var gabaritoInput = document.getElementById('gabarito_' + numero);
+                gabaritoInput.value = respostaSelecionada;
+            }
+
+            function verificarResposta(numero) {
+                var respostaSelecionada = document.querySelector('input[name="alternativa_' + numero + '"]:checked');
+                if (respostaSelecionada) {
+                    var respostaUsuario = respostaSelecionada.value;
+                    if (respostaUsuario === respostasCorretas[numero]) {
+                        alert("Resposta correta!");
+                    } else {
+                        alert("Resposta incorreta.");
+                    }
+                    atualizarGabarito(numero, respostaUsuario);
+                } else {
+                    alert("Selecione uma alternativa.");
+                }
+            }
+        </script>
+    </head>
+    <body>
+        <div class="container">
+    
+            <div class="card mt-3">
+                <div class="card-body">
+                    <h5 class="card-title">Questão 6:</h5>
+                    <p class="card-text instituicao_ano">EEAR / 2015</p>
+                    <p class="card-text escopo">Em uma PA cuja razão é igual ao seu primeiro termo, tem -se 𝒂𝟑+𝒂𝟕=𝟓. Assim, a razão dessa PA 
+é</p>
+                    <div class="form-group">
+                    <div class="form-check alternativa">
+                        <input class="form-check-input" type="radio" name="alternativa_6" id="alternativa_6_a" value="a">
+                        <label class="form-check-label" for="alternativa_6_a">a) 𝟎,𝟓.</label>
+                    </div>
+                    <div class="form-check alternativa">
+                        <input class="form-check-input" type="radio" name="alternativa_6" id="alternativa_6_b" value="b">
+                        <label class="form-check-label" for="alternativa_6_b">b) 𝟐,𝟓.</label>
+                    </div>
+                    <div class="form-check alternativa">
+                        <input class="form-check-input" type="radio" name="alternativa_6" id="alternativa_6_c" value="c">
+                        <label class="form-check-label" for="alternativa_6_c">c) 2.</label>
+                    </div>
+                    <div class="form-check alternativa">
+                        <input class="form-check-input" type="radio" name="alternativa_6" id="alternativa_6_d" value="d">
+                        <label class="form-check-label" for="alternativa_6_d">d) 1.</label>
+                    </div>
+                    <div class="form-check alternativa">
+                        <input class="form-check-input" type="radio" name="alternativa_6" id="alternativa_6_e" value="e">
+                        <label class="form-check-label" for="alternativa_6_e"></label>
+                    </div>
+                    </div>
+                    <input type="hidden" id="gabarito_6" name="gabarito_6" value="resposta_correspondente">
+                    <button class="btn btn-primary" onclick="verificarResposta('6')">Verificar Resposta</button>
+                </div>
+            </div>
+        
+            <div class="card mt-3">
+                <div class="card-body">
+                    <h5 class="card-title">Questão 14:</h5>
+                    <p class="card-text instituicao_ano">AFA / 2019</p>
+                    <p class="card-text escopo">Considere, no plano cartesiano, a figura abaixo, em que os segmentos horizontais são paralelos ao 
+eixo 𝑶𝒙 e os segmentos verticais são paralelos ao eixo 𝑶𝒚. 
+ 
+Sabe -se que:  
+- os comprimentos de segmentos consecutivos da poligonal, que começa na origem 𝑶(𝟎,𝟎) e 
+termina em 𝑸, formam uma progressão aritmética decrescente de razão 𝒓 e primeiro termo 𝒂𝟏, em 
+que ( −𝟏
+𝟏𝟓<𝒓<𝟎); 
+- dois comprimentos consecutivos da poligonal são  sempre perpendiculares;  
+- 𝑶𝑨=𝒂𝟏,𝑨𝑩=𝒂𝟐,𝑩𝑪=𝒂𝟑, e, assim sucessivamente, até 𝑷𝑸=𝒂𝟏𝟔. 
+Suponha que uma formiga parta da origem 𝑶(𝟎,𝟎), e percorra a trajetória descrita pela poligonal 
+até chegar ao ponto 𝑸. 
+Com base nas informações acima, an alise as proposições abaixo.  
+I. Se 𝒂𝟏=𝟏 e 𝒓=−𝟏
+𝟏𝟔, então a distância 𝒅 percorrida pela formiga até chegar ao ponto 𝑸 é tal que 
+𝒅=𝟏𝟕
+𝟐𝒂𝟏. 
+II. Quando a formiga estiver na posição do ponto 𝑳(𝒙,𝒚), então 𝒙=−𝟔𝒓. 
+III. Se 𝒂𝟏=𝟏, então de 𝑨 ate 𝑪, a formiga percorrerá a distância de 𝒅=𝟐+𝟑𝒓. 
+Quanto a veracidade das populações, tem -se</p>
+                    <div class="form-group">
+                    <div class="form-check alternativa">
+                        <input class="form-check-input" type="radio" name="alternativa_14" id="alternativa_14_a" value="a">
+                        <label class="form-check-label" for="alternativa_14_a">a) apenas uma delas é verdadeira.</label>
+                    </div>
+                    <div class="form-check alternativa">
+                        <input class="form-check-input" type="radio" name="alternativa_14" id="alternativa_14_b" value="b">
+                        <label class="form-check-label" for="alternativa_14_b">b) apenas duas são verdadeiras.</label>
+                    </div>
+                    <div class="form-check alternativa">
+                        <input class="form-check-input" type="radio" name="alternativa_14" id="alternativa_14_c" value="c">
+                        <label class="form-check-label" for="alternativa_14_c">c) todas são verdadeiras.</label>
+                    </div>
+                    <div class="form-check alternativa">
+                        <input class="form-check-input" type="radio" name="alternativa_14" id="alternativa_14_d" value="d">
+                        <label class="form-check-label" for="alternativa_14_d"></label>
+                    </div>
+                    <div class="form-check alternativa">
+                        <input class="form-check-input" type="radio" name="alternativa_14" id="alternativa_14_e" value="e">
+                        <label class="form-check-label" for="alternativa_14_e"></label>
+                    </div>
+                    </div>
+                    <input type="hidden" id="gabarito_14" name="gabarito_14" value="resposta_correspondente">
+                    <button class="btn btn-primary" onclick="verificarResposta('14')">Verificar Resposta</button>
+                </div>
+            </div>
+        
+            <div class="card mt-3">
+                <div class="card-body">
+                    <h5 class="card-title">Questão 14:</h5>
+                    <p class="card-text instituicao_ano">ITA / 2000</p>
+                    <p class="card-text escopo">O valor de 𝒏 que torna a sequência  
+𝟐+𝟑𝒏,−𝟓𝒏,𝟏−𝟒𝒏 
+uma progressão aritmética pertence ao intervalo</p>
+                    <div class="form-group">
+                    <div class="form-check alternativa">
+                        <input class="form-check-input" type="radio" name="alternativa_14" id="alternativa_14_a" value="a">
+                        <label class="form-check-label" for="alternativa_14_a">a) [−𝟐,−𝟏].</label>
+                    </div>
+                    <div class="form-check alternativa">
+                        <input class="form-check-input" type="radio" name="alternativa_14" id="alternativa_14_b" value="b">
+                        <label class="form-check-label" for="alternativa_14_b">b) [−𝟏,𝟎].</label>
+                    </div>
+                    <div class="form-check alternativa">
+                        <input class="form-check-input" type="radio" name="alternativa_14" id="alternativa_14_c" value="c">
+                        <label class="form-check-label" for="alternativa_14_c">c) [𝟎,𝟏].</label>
+                    </div>
+                    <div class="form-check alternativa">
+                        <input class="form-check-input" type="radio" name="alternativa_14" id="alternativa_14_d" value="d">
+                        <label class="form-check-label" for="alternativa_14_d">d) [𝟏,𝟐].</label>
+                    </div>
+                    <div class="form-check alternativa">
+                        <input class="form-check-input" type="radio" name="alternativa_14" id="alternativa_14_e" value="e">
+                        <label class="form-check-label" for="alternativa_14_e">e) [𝟐,𝟑].</label>
+                    </div>
+                    </div>
+                    <input type="hidden" id="gabarito_14" name="gabarito_14" value="resposta_correspondente">
+                    <button class="btn btn-primary" onclick="verificarResposta('14')">Verificar Resposta</button>
+                </div>
+            </div>
+        
+            <div class="card mt-3">
+                <div class="card-body">
+                    <h5 class="card-title">Questão 16:</h5>
+                    <p class="card-text instituicao_ano">EEAR / 2011</p>
+                    <p class="card-text escopo">Sejam as sequências 𝑺𝟏=(𝟏,𝟓,𝟐𝟓,𝟏𝟐𝟓,…) e 𝑺𝟐=(𝟒,𝟕,𝟏𝟎,𝟏𝟑,…). A razão entre o 𝟔° termo de 
+𝑺𝟏 e o 𝟖° de 𝑺𝟐 é</p>
+                    <div class="form-group">
+                    <div class="form-check alternativa">
+                        <input class="form-check-input" type="radio" name="alternativa_16" id="alternativa_16_a" value="a">
+                        <label class="form-check-label" for="alternativa_16_a">a) 150.</label>
+                    </div>
+                    <div class="form-check alternativa">
+                        <input class="form-check-input" type="radio" name="alternativa_16" id="alternativa_16_b" value="b">
+                        <label class="form-check-label" for="alternativa_16_b">b) 125.</label>
+                    </div>
+                    <div class="form-check alternativa">
+                        <input class="form-check-input" type="radio" name="alternativa_16" id="alternativa_16_c" value="c">
+                        <label class="form-check-label" for="alternativa_16_c">c) 100.</label>
+                    </div>
+                    <div class="form-check alternativa">
+                        <input class="form-check-input" type="radio" name="alternativa_16" id="alternativa_16_d" value="d">
+                        <label class="form-check-label" for="alternativa_16_d">d) 75.</label>
+                    </div>
+                    <div class="form-check alternativa">
+                        <input class="form-check-input" type="radio" name="alternativa_16" id="alternativa_16_e" value="e">
+                        <label class="form-check-label" for="alternativa_16_e"></label>
+                    </div>
+                    </div>
+                    <input type="hidden" id="gabarito_16" name="gabarito_16" value="resposta_correspondente">
+                    <button class="btn btn-primary" onclick="verificarResposta('16')">Verificar Resposta</button>
+                </div>
+            </div>
+        
+            <div class="card mt-3">
+                <div class="card-body">
+                    <h5 class="card-title">Questão 42:</h5>
+                    <p class="card-text instituicao_ano">EEAR / 2009</p>
+                    <p class="card-text escopo">Quatro números naturais formam uma PG crescente. Se a soma dos dois primeiros números é 12, e 
+a dos dois últimos é 300, a razão da PG é</p>
+                    <div class="form-group">
+                    <div class="form-check alternativa">
+                        <input class="form-check-input" type="radio" name="alternativa_42" id="alternativa_42_a" value="a">
+                        <label class="form-check-label" for="alternativa_42_a">a) 7.</label>
+                    </div>
+                    <div class="form-check alternativa">
+                        <input class="form-check-input" type="radio" name="alternativa_42" id="alternativa_42_b" value="b">
+                        <label class="form-check-label" for="alternativa_42_b">b) 5.</label>
+                    </div>
+                    <div class="form-check alternativa">
+                        <input class="form-check-input" type="radio" name="alternativa_42" id="alternativa_42_c" value="c">
+                        <label class="form-check-label" for="alternativa_42_c">c) 4.</label>
+                    </div>
+                    <div class="form-check alternativa">
+                        <input class="form-check-input" type="radio" name="alternativa_42" id="alternativa_42_d" value="d">
+                        <label class="form-check-label" for="alternativa_42_d">d) 2.</label>
+                    </div>
+                    <div class="form-check alternativa">
+                        <input class="form-check-input" type="radio" name="alternativa_42" id="alternativa_42_e" value="e">
+                        <label class="form-check-label" for="alternativa_42_e"></label>
+                    </div>
+                    </div>
+                    <input type="hidden" id="gabarito_42" name="gabarito_42" value="resposta_correspondente">
+                    <button class="btn btn-primary" onclick="verificarResposta('42')">Verificar Resposta</button>
+                </div>
+            </div>
+        
+        </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    </body>
+    </html>
+    
