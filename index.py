@@ -1,3 +1,4 @@
+import os
 import re
 import random
 from PyPDF2 import PdfReader
@@ -23,7 +24,6 @@ def extrair_questoes_e_gabarito(pdf_path):
                     re.sub(r'\b\d{3}\.\d{3}\.\d{3}-\d{2}\b', '', matches_questao[i][3]),
                     re.sub(r'\b\d{3}\.\d{3}\.\d{3}-\d{2}\b', '', matches_questao[i][4])
                 )
-                # Verifica se a questão tem alternativas
                 if 'a)' in questao[4]:
                     questoes.append(questao)
             padrao_gabarito = r'(\d+)\.\s*([a-eA-E]|Anulada)'
@@ -103,8 +103,8 @@ def criar_html_questoes(questoes, gabarito, valor_gabarito):
         <div class="container">
     """
     
-    questoes_selecionadas = set()  # Conjunto para manter controle das questões já selecionadas
-    escopos_selecionados = set()  # Conjunto para manter controle dos escopos já selecionados
+    questoes_selecionadas = set()
+    escopos_selecionados = set()
     
     for questao in questoes:
         numero, instituicao, ano, escopo, alternativas = questao
@@ -157,7 +157,7 @@ def ordenar_questoes(questoes):
 # Rota para a página inicial
 @app.route('/')
 def index():
-    return send_file('index.html')
+    return render_template('index.html')
 
 # Rota para processar o upload do arquivo PDF
 @app.route('/processar_pdf', methods=['POST'])
@@ -170,35 +170,31 @@ def processar_pdf():
         return redirect('/')
     
     if file:
-        pdf_path = 'uploaded_file.pdf'
-        file.save(pdf_path)
+        temp_pdf_path = os.path.join('/tmp', 'uploaded_file.pdf')
+        file.save(temp_pdf_path)
         
         # Extrai as questões e o gabarito do PDF
-        questoes, gabarito = extrair_questoes_e_gabarito(pdf_path)
+        questoes, gabarito = extrair_questoes_e_gabarito(temp_pdf_path)
         
-        # Defina o valor do gabarito que você deseja utilizar
         valor_gabarito = "resposta_correspondente"
         
-        # Ordena as questões
         questoes_ordenadas = ordenar_questoes(questoes)
         
-        # Cria o HTML com as questões, alternativas e gabarito, passando o valor_gabarito
         html_content = criar_html_questoes(questoes_ordenadas, gabarito, valor_gabarito)
         
-        # Remove CPF do HTML
         html_content = remover_cpf(html_content)
         
-        # Atualiza o arquivo HTML de resultado existente com o conteúdo das questões
-        with open('resultado.html', 'w', encoding='utf-8') as resultado_file:
+        resultado_html_path = os.path.join('/tmp', 'resultado.html')
+        with open(resultado_html_path, 'w', encoding='utf-8') as resultado_file:
             resultado_file.write(html_content)
         
-        return redirect(url_for('resultado'))
+        return send_file(resultado_html_path)
 
 # Rota para a página de resultados
 @app.route('/resultado')
 def resultado():
-    # Retorna o arquivo HTML de resultado existente
-    return send_file('resultado.html')
+    resultado_html_path = os.path.join('/tmp', 'resultado.html')
+    return send_file(resultado_html_path)
 
 if __name__ == '__main__':
     app.run(debug=True)
