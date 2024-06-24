@@ -13,131 +13,48 @@ def extrair_questoes_e_gabarito(pdf_path, chunk_size=1):
         questoes = []
         gabarito = {}
         
-        # Iterar pelas páginas do PDF em chunks de tamanho chunk_size
         for chunk_start in range(0, len(reader.pages), chunk_size):
             chunk_end = min(chunk_start + chunk_size, len(reader.pages))
-            
-            # Processar as páginas no chunk atual
             for page_number in range(chunk_start, chunk_end):
                 page = reader.pages[page_number]
                 text = page.extract_text()
-
-                # Padrão 1: 1) (Instituição/Ano) Pergunta... a) Alternativa 1 ...
-                padrao_questao_1 = r'(\d+)\)\s*\((.*?)\/(\d{4})\)\s*\n\s*(.*?)\s*(a\)\s*[\s\S]*?)(?=\n\d+\)\s*\(.*?\/\d{4}\)|\Z)'
-                matches_questao_1 = re.findall(padrao_questao_1, text, re.DOTALL)
-
-                # Padrão 2: Instituição/Ano 1) Pergunta... a) Alternativa 1 ...
-                padrao_questao_2 = r'(.*?)\/(\d{4})\s*\n\s*(\d+)\)\s*(.*?)\s*(a\)\s*[\s\S]*?)(?=\n.*?\/\d{4}|\Z)'
-                matches_questao_2 = re.findall(padrao_questao_2, text, re.DOTALL)
-
-                # Padrão 3: Instituição/Ano 1) Pergunta... a) Alternativa 1 ...
-                padrao_questao_3 = r'(.*?)\/(\d{4})\s*\n\s*(\d+)\)\s*(.*?)\s*(a\)\s*[\s\S]*?)(?=\n.*?\/\d{4}|\Z)'
-                matches_questao_3 = re.findall(padrao_questao_3, text, re.DOTALL)
-
-                # Padrão 4: 1) Pergunta... a) Alternativa 1 ...
-                padrao_questao_4 = r'(\d+)\)\s*(.*?)\s*(a\)\s*.*?)(?=\n\d+\)\s*|\Z)'
-                matches_questao_4 = re.findall(padrao_questao_4, text, re.DOTALL)
-
-                # Padrão 5: 1. (Instituição/Ano) Pergunta... a) Alternativa 1 ...
-                padrao_questao_5 = r'(\d+)\.\s*\((.*?)\/(\d{4})\)\s*\n\s*(.*?)\s*(a\)\s*[\s\S]*?)(?=\n\d+\.\s*\(.*?\/\d{4}\)|\Z)'
-                matches_questao_5 = re.findall(padrao_questao_5, text, re.DOTALL)
-
-                # Padrão 6: Instituição/Ano 1. Pergunta... a) Alternativa 1 ...
-                padrao_questao_6 = r'(.*?)\/(\d{4})\s*\n\s*(\d+)\.\s*(.*?)\s*(a\)\s*[\s\S]*?)(?=\n.*?\/\d{4}|\Z)'
-                matches_questao_6 = re.findall(padrao_questao_6, text, re.DOTALL)
-
-                # Processar e adicionar questões para cada padrão
-                for match in matches_questao_1:
-                    questao = (
-                        match[0],
-                        match[1],
-                        match[2],
-                        match[3].strip(),
-                        match[4]
-                    )
-                    if 'a)' in questao[4]:
-                        questoes.append(questao)
-
-                for match in matches_questao_2:
-                    questao = (
-                        match[2],
-                        match[0],
-                        match[1],
-                        match[3].strip(),
-                        match[4]
-                    )
-                    if 'a)' in questao[4]:
-                        questoes.append(questao)
-
-                for match in matches_questao_3:
-                    questao = (
-                        match[2],
-                        match[0],
-                        match[1],
-                        match[3].strip(),
-                        match[4]
-                    )
-                    if 'a)' in questao[4]:
-                        questoes.append(questao)
-
-                for match in matches_questao_4:
-                    questao = (
-                        match[0],
-                        '',
-                        '',
-                        match[1].strip(),
-                        match[2]
-                    )
-                    if 'a)' in questao[3]:
-                        questoes.append(questao)
-
-                for match in matches_questao_5:
-                    questao = (
-                        match[0],
-                        match[1],
-                        match[2],
-                        match[3].strip(),
-                        match[4]
-                    )
-                    if 'a)' in questao[4]:
-                        questoes.append(questao)
-
-                for match in matches_questao_6:
-                    questao = (
-                        match[2],
-                        match[0],
-                        match[1],
-                        match[3].strip(),
-                        match[4]
-                    )
-                    if 'a)' in questao[4]:
-                        questoes.append(questao)
-
-                # Padrão de gabarito 1: Número. Resposta (a-e ou Anulada)
-                padrao_gabarito_1 = r'(\d+)\.\s*([a-eA-E]|Anulada)'
-                matches_gabarito_1 = re.findall(padrao_gabarito_1, text)
-                for numero, resposta in matches_gabarito_1:
-                    gabarito[numero] = resposta.strip()
-
-                # Padrão de gabarito 2: Número) Resposta (a-e ou Anulada)
-                padrao_gabarito_2 = r'(\d+)\)\s*([a-eA-E]|Anulada)'
-                matches_gabarito_2 = re.findall(padrao_gabarito_2, text)
-                for numero, resposta in matches_gabarito_2:
-                    gabarito[numero] = resposta.strip()
-
-                # Padrão de gabarito 3: Número. Resposta (a-e ou Anulada) (Instituição/Ano)
-                padrao_gabarito_3 = r'(\d+)\.\s*([a-eA-E]|Anulada)\s*\((.*?)\/(\d{4})\)'
-                matches_gabarito_3 = re.findall(padrao_gabarito_3, text)
-                for numero, resposta, instituicao, ano in matches_gabarito_3:
-                    gabarito[numero] = resposta.strip()
-
-                # Padrão de gabarito 4: Número) Resposta (a-e ou Anulada) (Instituição/Ano)
-                padrao_gabarito_4 = r'(\d+)\)\s*([a-eA-E]|Anulada)\s*\((.*?)\/(\d{4})\)'
-                matches_gabarito_4 = re.findall(padrao_gabarito_4, text)
-                for numero, resposta, instituicao, ano in matches_gabarito_4:
-                    gabarito[numero] = resposta.strip()
+                
+                padroes_questoes = [
+                    r'(\d+)\)\s*\((.*?)\/(\d{4})\)\s*\n\s*(.*?)\s*(a\)\s*[\s\S]*?)(?=\n\d+\)\s*\(.*?\/\d{4}\)|\Z)',
+                    r'(.*?)\/(\d{4})\s*\n\s*(\d+)\)\s*(.*?)\s*(a\)\s*[\s\S]*?)(?=\n.*?\/\d{4}|\Z)',
+                    r'(.*?)\/(\d{4})\s*\n\s*(\d+)\)\s*(.*?)\s*(a\)\s*[\s\S]*?)(?=\n.*?\/\d{4}|\Z)',
+                    r'(\d+)\)\s*(.*?)\s*(a\)\s*.*?)(?=\n\d+\)\s*|\Z)',
+                    r'(\d+)\.\s*\((.*?)\/(\d{4})\)\s*\n\s*(.*?)\s*(a\)\s*[\s\S]*?)(?=\n\d+\.\s*\(.*?\/\d{4}\)|\Z)',
+                    r'(.*?)\/(\d{4})\s*\n\s*(\d+)\.\s*(.*?)\s*(a\)\s*[\s\S]*?)(?=\n.*?\/\d{4}|\Z)'
+                ]
+                
+                for padrao in padroes_questoes:
+                    matches = re.findall(padrao, text, re.DOTALL)
+                    for match in matches:
+                        questao = (
+                            match[0],
+                            match[1] if len(match) > 1 else '',
+                            match[2] if len(match) > 2 else '',
+                            match[3].strip() if len(match) > 3 else '',
+                            match[4] if len(match) > 4 else match[2]
+                        )
+                        if 'a)' in questao[4]:
+                            questoes.append(questao)
+                
+                padroes_gabarito = [
+                    r'(\d+)\.\s*([a-eA-E]|Anulada)',
+                    r'(\d+)\)\s*([a-eA-E]|Anulada)',
+                    r'(\d+)\.\s*([a-eA-E]|Anulada)\s*\((.*?)\/(\d{4})\)',
+                    r'(\d+)\)\s*([a-eA-E]|Anulada)\s*\((.*?)\/(\d{4})\)'
+                ]
+                
+                for padrao in padroes_gabarito:
+                    matches = re.findall(padrao, text)
+                    for match in matches:
+                        gabarito[match[0]] = match[1].strip()
 
     return questoes, gabarito
+
 
 # Função para criar as alternativas de acordo com o número fornecido
 def criar_alternativas(numero, alternativas_lista):
