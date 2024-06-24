@@ -7,6 +7,7 @@ from flask import Flask, render_template, request, redirect, send_file, url_for
 app = Flask(__name__)
 
 # Função para extrair as questões e o gabarito
+
 def extrair_questoes_e_gabarito(pdf_path):
     with open(pdf_path, 'rb') as file:
         reader = PdfReader(file)
@@ -14,23 +15,106 @@ def extrair_questoes_e_gabarito(pdf_path):
         gabarito = {}
         for page in reader.pages:
             text = page.extract_text()
-            padrao_questao = r'(\d+)\.\s*\((.*?)\/(\d{4})\)\s*\n\s*(.*?)\s*(a\)\s*[\s\S]*?)(?=\n\d+\.\s*\(.*?\/\d{4}\)|\Z)'
-            matches_questao = re.findall(padrao_questao, text, re.DOTALL)
-            for i in range(len(matches_questao)):
+            
+            # Padrão 1: 1) (Instituição/Ano) Pergunta... a) Alternativa 1 ...
+            padrao_questao_1 = r'(\d+)\)\s*\((.*?)\/(\d{4})\)\s*\n\s*(.*?)\s*(a\)\s*[\s\S]*?)(?=\n\d+\)\s*\(.*?\/\d{4}\)|\Z)'
+            matches_questao_1 = re.findall(padrao_questao_1, text, re.DOTALL)
+            
+            # Padrão 2: Instituição/Ano 1) Pergunta... a) Alternativa 1 ...
+            padrao_questao_2 = r'(.*?)\/(\d{4})\s*\n\s*(\d+)\)\s*(.*?)\s*(a\)\s*[\s\S]*?)(?=\n.*?\/\d{4}|\Z)'
+            matches_questao_2 = re.findall(padrao_questao_2, text, re.DOTALL)
+            
+            # Padrão 3: Instituição/Ano 1) Pergunta... a) Alternativa 1 ...
+            padrao_questao_3 = r'(.*?)\/(\d{4})\s*\n\s*(\d+)\)\s*(.*?)\s*(a\)\s*[\s\S]*?)(?=\n.*?\/\d{4}|\Z)'
+            matches_questao_3 = re.findall(padrao_questao_3, text, re.DOTALL)
+            
+            # Padrão 4: 1) Pergunta... a) Alternativa 1 ...
+            padrao_questao_4 = r'(\d+)\)\s*(.*?)\s*(a\)\s*.*?)(?=\n\d+\)\s*|\Z)'
+            matches_questao_4 = re.findall(padrao_questao_4, text, re.DOTALL)
+            
+            # Padrão 5: 1. (Instituição/Ano) Pergunta... a) Alternativa 1 ...
+            padrao_questao_5 = r'(\d+)\.\s*\((.*?)\/(\d{4})\)\s*\n\s*(.*?)\s*(a\)\s*[\s\S]*?)(?=\n\d+\.\s*\(.*?\/\d{4}\)|\Z)'
+            matches_questao_5 = re.findall(padrao_questao_5, text, re.DOTALL)
+            
+            # Padrão 6: Instituição/Ano 1. Pergunta... a) Alternativa 1 ...
+            padrao_questao_6 = r'(.*?)\/(\d{4})\s*\n\s*(\d+)\.\s*(.*?)\s*(a\)\s*[\s\S]*?)(?=\n.*?\/\d{4}|\Z)'
+            matches_questao_6 = re.findall(padrao_questao_6, text, re.DOTALL)
+
+            # Processar e adicionar questões para cada padrão
+            for match in matches_questao_1:
                 questao = (
-                    re.sub(r'\b\d{3}\.\d{3}\.\d{3}-\d{2}\b', '', matches_questao[i][0]), 
-                    re.sub(r'\b\d{3}\.\d{3}\.\d{3}-\d{2}\b', '', matches_questao[i][1]), 
-                    re.sub(r'\b\d{3}\.\d{3}\.\d{3}-\d{2}\b', '', matches_questao[i][2]),
-                    re.sub(r'\b\d{3}\.\d{3}\.\d{3}-\d{2}\b', '', matches_questao[i][3]),
-                    re.sub(r'\b\d{3}\.\d{3}\.\d{3}-\d{2}\b', '', matches_questao[i][4])
+                    match[0],
+                    match[1],
+                    match[2],
+                    match[3],
+                    match[4]
                 )
                 if 'a)' in questao[4]:
                     questoes.append(questao)
+
+            for match in matches_questao_2:
+                questao = (
+                    match[2],
+                    match[0],
+                    match[1],
+                    match[3],
+                    match[4]
+                )
+                if 'a)' in questao[4]:
+                    questoes.append(questao)
+
+            for match in matches_questao_3:
+                questao = (
+                    match[2],
+                    match[0],
+                    match[1],
+                    match[3],
+                    match[4]
+                )
+                if 'a)' in questao[4]:
+                    questoes.append(questao)
+
+            for match in matches_questao_4:
+                questao = (
+                    match[0],
+                    '',
+                    '',
+                    match[1],
+                    match[2]
+                )
+                if 'a)' in questao[2]:
+                    questoes.append(questao)
+
+            for match in matches_questao_5:
+                questao = (
+                    match[0],
+                    match[1],
+                    match[2],
+                    match[3],
+                    match[4]
+                )
+                if 'a)' in questao[4]:
+                    questoes.append(questao)
+
+            for match in matches_questao_6:
+                questao = (
+                    match[2],
+                    match[0],
+                    match[1],
+                    match[3],
+                    match[4]
+                )
+                if 'a)' in questao[4]:
+                    questoes.append(questao)
+
+            # Padrão de gabarito
             padrao_gabarito = r'(\d+)\.\s*([a-eA-E]|Anulada)'
             matches_gabarito = re.findall(padrao_gabarito, text)
             for numero, resposta in matches_gabarito:
                 gabarito[numero] = resposta.strip()
+                
     return questoes, gabarito
+
 
 # Função para criar as alternativas de acordo com o número fornecido
 def criar_alternativas(numero, alternativas_lista):
