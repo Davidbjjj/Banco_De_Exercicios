@@ -8,6 +8,7 @@ app = Flask(__name__)
 
 # Função para extrair as questões e o gabarito
 
+# Função para extrair as questões e o gabarito
 def extrair_questoes_e_gabarito(pdf_path):
     with open(pdf_path, 'rb') as file:
         reader = PdfReader(file)
@@ -107,10 +108,28 @@ def extrair_questoes_e_gabarito(pdf_path):
                 if 'a)' in questao[4]:
                     questoes.append(questao)
 
-            # Padrão de gabarito
-            padrao_gabarito = r'(\d+)\.\s*([a-eA-E]|Anulada)'
-            matches_gabarito = re.findall(padrao_gabarito, text)
-            for numero, resposta in matches_gabarito:
+            # Padrão de gabarito 1: Número. Resposta (a-e ou Anulada)
+            padrao_gabarito_1 = r'(\d+)\.\s*([a-eA-E]|Anulada)'
+            matches_gabarito_1 = re.findall(padrao_gabarito_1, text)
+            for numero, resposta in matches_gabarito_1:
+                gabarito[numero] = resposta.strip()
+
+            # Padrão de gabarito 2: Número) Resposta (a-e ou Anulada)
+            padrao_gabarito_2 = r'(\d+)\)\s*([a-eA-E]|Anulada)'
+            matches_gabarito_2 = re.findall(padrao_gabarito_2, text)
+            for numero, resposta in matches_gabarito_2:
+                gabarito[numero] = resposta.strip()
+
+            # Padrão de gabarito 3: Número. Resposta (a-e ou Anulada) (Instituição/Ano)
+            padrao_gabarito_3 = r'(\d+)\.\s*([a-eA-E]|Anulada)\s*\((.*?)\/(\d{4})\)'
+            matches_gabarito_3 = re.findall(padrao_gabarito_3, text)
+            for numero, resposta, instituicao, ano in matches_gabarito_3:
+                gabarito[numero] = resposta.strip()
+
+            # Padrão de gabarito 4: Número) Resposta (a-e ou Anulada) (Instituição/Ano)
+            padrao_gabarito_4 = r'(\d+)\)\s*([a-eA-E]|Anulada)\s*\((.*?)\/(\d{4})\)'
+            matches_gabarito_4 = re.findall(padrao_gabarito_4, text)
+            for numero, resposta, instituicao, ano in matches_gabarito_4:
                 gabarito[numero] = resposta.strip()
                 
     return questoes, gabarito
